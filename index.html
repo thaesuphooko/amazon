@@ -5,6 +5,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <style>
         body { font-family: sans-serif; padding: 20px; }
+        input { padding: 10px; width: 300px; }
         #productTable { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
     </style>
@@ -12,13 +13,13 @@
 <body>
 
     <h2>Amazon ပစ္စည်းများရှာဖွေရန်</h2>
-    <input type="text" id="searchInput" placeholder="ပစ္စည်းနာမည်ရိုက်ပါ..." onkeyup="filterProducts()" style="padding: 10px; width: 300px;">
-    
+    <input type="text" id="searchInput" placeholder="ပစ္စည်းနာမည် ရိုက်ထည့်ပါ..." onkeyup="filterProducts()">
     <div id="productDisplay"></div>
 
     <script>
-        // သင်ရထားတဲ့ လင့်ခ်ကို ဒီမှာထည့်ပါ
+        // သင့် Google Sheet Publish Link ကို ဒီမှာထည့်ပါ
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTRWv5GgKpvnXuuNUJ2DSDJ6_Zc-I-IWmIsMOoQtVsyvw7fKDxOdLdw79sdVOeGYdBr8OkyF1tG0yC/pub?gid=101546465&single=true&output=csv';
+
         Papa.parse(csvUrl, {
             download: true,
             header: true,
@@ -31,6 +32,7 @@
         function renderTable(data) {
             let html = "<table id='productTable'><tr><th>Title</th><th>Price</th></tr>";
             data.forEach(item => {
+                // Sheet ထဲကအတိုင်း title နဲ့ price ကို သုံးထားပါတယ်
                 html += <tr><td>${item.title}</td><td>${item.price}</td></tr>;
             });
             html += "</table>";
