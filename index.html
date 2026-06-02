@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Amazon Product Search</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        #productTable { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    </style>
+</head>
+<body>
+
+    <h2>Amazon ပစ္စည်းများရှာဖွေရန်</h2>
+    <input type="text" id="searchInput" placeholder="ပစ္စည်းနာမည်ရိုက်ပါ..." onkeyup="filterProducts()" style="padding: 10px; width: 300px;">
+    
+    <div id="productDisplay"></div>
+
+    <script>
+        // သင်ရထားတဲ့ လင့်ခ်ကို ဒီမှာထည့်ပါ
+        const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTRWv5GgGkpvnXuuNUJ2DSDJ6_Zc-l-IWmIsMOoQtVsyvw7fKDxOdLdw79sdVOeGYdBr8OkyF1tG0yC/pub?gid=101546465&single=true&output=csv';
+
+        Papa.parse(csvUrl, {
+            download: true,
+            header: true,
+            complete: function(results) {
+                window.allProducts = results.data;
+                renderTable(window.allProducts);
+            }
+        });
+
+        function renderTable(data) {
+            let html = "<table id='productTable'><tr><th>Title</th><th>Price</th></tr>";
+            data.forEach(item => {
+                html += <tr><td>${item.title}</td><td>${item.price}</td></tr>;
+            });
+            html += "</table>";
+            document.getElementById('productDisplay').innerHTML = html;
+        }
+
+        function filterProducts() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let filtered = window.allProducts.filter(item => 
+                item.title && item.title.toLowerCase().includes(input)
+            );
+            renderTable(filtered);
+        }
+    </script>
+</body>
+</html>
