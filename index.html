@@ -3,12 +3,6 @@
 <head>
     <title>Amazon Product Search</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <style>
-        body { font-family: sans-serif; padding: 20px; }
-        input { padding: 10px; width: 300px; }
-        #productTable { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-    </style>
 </head>
 <body>
 
@@ -17,23 +11,25 @@
     <div id="productDisplay"></div>
 
     <script>
-        // သင့် Google Sheet Publish Link ကို ဒီမှာထည့်ပါ
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTRWv5GgKpvnXuuNUJ2DSDJ6_Zc-I-IWmIsMOoQtVsyvw7fKDxOdLdw79sdVOeGYdBr8OkyF1tG0yC/pub?gid=101546465&single=true&output=csv';
 
         Papa.parse(csvUrl, {
             download: true,
             header: true,
             complete: function(results) {
+                console.log("Data:", results.data); // ဒီစာကြောင်းက ဘာ error တက်လဲ သိအောင်ကူညီပေးပါမယ်
                 window.allProducts = results.data;
                 renderTable(window.allProducts);
             }
         });
 
         function renderTable(data) {
-            let html = "<table id='productTable'><tr><th>Title</th><th>Price</th></tr>";
+            let html = "<table border='1'><tr><th>Title</th><th>Price</th></tr>";
             data.forEach(item => {
-                // Sheet ထဲကအတိုင်း title နဲ့ price ကို သုံးထားပါတယ်
-                html += <tr><td>${item.title}</td><td>${item.price}</td></tr>;
+                // ဒီနေရာမှာ title, price နာမည်အမှန်ကို ယူသုံးပါ
+                let name = item.title || "No Title";
+                let price = item.price || "0";
+                html += <tr><td>${name}</td><td>${price}</td></tr>;
             });
             html += "</table>";
             document.getElementById('productDisplay').innerHTML = html;
